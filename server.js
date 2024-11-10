@@ -10,21 +10,21 @@ app.use(cors());
 app.use(bodyParser.json()); // JSON 형식의 요청 본문을 처리
 
 
-// MySQL 데이터베이스 연결 설정
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root', // MySQL 사용자명
-    password: '123456', // MySQL 비밀번호
-    database: 'sensorDB'
-});
+// 데이터베이스 연결 설정
+mongoose.connect('mongodb://localhost:27017/sensorDB', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('Failed to connect to MongoDB:', err));
 
-db.connect((err) => {
-    if (err) {
-        console.error('Failed to connect to MySQL:', err);
-        return;
-    }
-    console.log('Connected to MySQL');
-});
+// MongoDB 모델 정의
+const SensorData = mongoose.model('SensorData', new mongoose.Schema({
+    accelerationX: Number,
+    accelerationY: Number,
+    accelerationZ: Number,
+    alpha: Number,
+    beta: Number,
+    gamma: Number,
+    timestamp: { type: Date, default: Date.now }
+}));
 
 
 
@@ -32,16 +32,24 @@ db.connect((err) => {
 app.post('/api/sensor-data', (req, res) => {
     const data = req.body;
 
-    // SQL 쿼리로 데이터 삽입
-    const query = 'INSERT INTO sensor_data (accelerationX, accelerationY, accelerationZ, alpha, beta, gamma) VALUES (?, ?, ?, ?, ?, ?)';
-    const values = [data.accelerationX, data.accelerationY, data.accelerationZ, data.alpha, data.beta, data.gamma];
-
-    db.query(query, values, (err, results) => {
-        if (err) {
-            return res.status(500).send({ error: 'Failed to save data' });
-        }
-        res.status(200).send(results);
+    // 새로운 데이터 인스턴스 생성
+    const newSensorData = new SensorData({
+        accelerationX: data.accelerationX,
+        accelerationY: data.accelerationY,
+        accelerationZ: data.accelerationZ,
+        alpha: data.alpha,
+        beta: data.beta,
+        gamma: data.gamma
     });
+
+    // MongoDB에 데이터 저장
+    newSensorData.save()
+        .then((savedData) => {
+            res.status(200).send(savedData);
+        })
+        .catch((err) => {
+            res.status(500).send({ error: 'Failed to save data' });
+        });
 });
 
 // 서버 시작
