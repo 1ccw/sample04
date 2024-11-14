@@ -120,7 +120,7 @@ if (window.DeviceOrientationEvent) {
 
 // 서버로 데이터를 보내는 함수
 function sendDataToServer() {
-    fetch('https://2873-114-70-38-240.ngrok-free.app/api/sensor-data', { // 서버 엔드포인트 URL로 교체
+    fetch('https://c32a-114-70-38-240.ngrok-free.app/api/sensor-data', { // 서버 엔드포인트 URL로 교체
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
