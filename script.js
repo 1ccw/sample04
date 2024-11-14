@@ -81,12 +81,15 @@ function handleMotionEvent(event) {
     sensorData.accelerationZ = event.accelerationIncludingGravity.z;
 
     console.log("Acceleration with gravity:", sensorData.accelerationX, sensorData.accelerationY, sensorData.accelerationZ);
-    sendDataToServer();
+    
+    if (!isCollectingData) {
+        isCollectingData = true;
+        sendDataToServer();
 
-     // 지정된 시간(예: 5000ms) 후 데이터 수집 가능 상태로 설정
-    setTimeout(() => {
-        isCollectingData = false;
-    }, 5000); // 5초 간격
+        setTimeout(() => {
+            isCollectingData = false; // 5초 후 데이터 전송 가능 상태로 전환
+        }, 5000);
+    }
 }
 
 function handleOrientationEvent(event) {
@@ -95,13 +98,17 @@ function handleOrientationEvent(event) {
     sensorData.gamma = event.gamma;
 
     console.log("Orientation:", sensorData.alpha, sensorData.beta, sensorData.gamma);
-    sendDataToServer();
+    
+    if (!isCollectingData) {
+        isCollectingData = true;
+        sendDataToServer();
 
-     // 지정된 시간(예: 5000ms) 후 데이터 수집 가능 상태로 설정
-    setTimeout(() => {
-        isCollectingData = false;
-    }, 5000); // 5초 간격
+        setTimeout(() => {
+            isCollectingData = false; // 5초 후 데이터 전송 가능 상태로 전환
+        }, 5000);
+    }
 }
+
 
 if (window.DeviceOrientationEvent) {
     window.addEventListener("deviceorientation", handleOrientationEvent, true);
