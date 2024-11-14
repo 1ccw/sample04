@@ -82,6 +82,11 @@ function handleMotionEvent(event) {
 
     console.log("Acceleration with gravity:", sensorData.accelerationX, sensorData.accelerationY, sensorData.accelerationZ);
     sendDataToServer();
+
+     // 지정된 시간(예: 5000ms) 후 데이터 수집 가능 상태로 설정
+    setTimeout(() => {
+        isCollectingData = false;
+    }, 5000); // 5초 간격
 }
 
 function handleOrientationEvent(event) {
@@ -91,6 +96,11 @@ function handleOrientationEvent(event) {
 
     console.log("Orientation:", sensorData.alpha, sensorData.beta, sensorData.gamma);
     sendDataToServer();
+
+     // 지정된 시간(예: 5000ms) 후 데이터 수집 가능 상태로 설정
+    setTimeout(() => {
+        isCollectingData = false;
+    }, 5000); // 5초 간격
 }
 
 if (window.DeviceOrientationEvent) {
