@@ -66,13 +66,11 @@ if (typeof DeviceMotionEvent.requestPermission === 'function') {
         .then(permissionState => {
             if (permissionState === 'granted') {
                 window.addEventListener('devicemotion', handleMotionEvent);
-                window.addEventListener('deviceorientation', handleOrientationEvent);
             }
         })
         .catch(console.error);
 } else {
     window.addEventListener('devicemotion', handleMotionEvent);
-    window.addEventListener('deviceorientation', handleOrientationEvent);
 }
 
 function handleMotionEvent(event) {
@@ -80,7 +78,13 @@ function handleMotionEvent(event) {
     sensorData.accelerationY = event.accelerationIncludingGravity.y;
     sensorData.accelerationZ = event.accelerationIncludingGravity.z;
 
+    sensorData.alpha = event.rotationRate.alpha;
+    sensorData.beta = event.rotationRate.beta;
+    sensorData.gamma = event.rotationRate.gamma;
+
     console.log("Acceleration with gravity:", sensorData.accelerationX, sensorData.accelerationY, sensorData.accelerationZ);
+    console.log("rotationRate:", sensorData.alpha, sensorData.beta, sensorData.gamma);
+
     
     if (!isCollectingData) {
         isCollectingData = true;
@@ -92,22 +96,10 @@ function handleMotionEvent(event) {
     }
 }
 
-function handleOrientationEvent(event) {
-    sensorData.alpha = event.alpha;
-    sensorData.beta = event.beta;
-    sensorData.gamma = event.gamma;
 
-    console.log("Orientation:", sensorData.alpha, sensorData.beta, sensorData.gamma);
     
-    if (!isCollectingData) {
-        isCollectingData = true;
-        sendDataToServer();
-
-        setTimeout(() => {
-            isCollectingData = false; // 5초 후 데이터 전송 가능 상태로 전환
-        }, 5000);
-    }
-}
+    
+  
 
 
 if (window.DeviceOrientationEvent) {
@@ -120,7 +112,7 @@ if (window.DeviceOrientationEvent) {
 
 // 서버로 데이터를 보내는 함수
 function sendDataToServer() {
-    fetch('https://0c2f-2001-2d8-f236-207b-d552-dd42-4814-a64e.ngrok-free.app/api/sensor-data', { // 서버 엔드포인트 URL로 교체
+    fetch('https://3905-2001-2d8-f1bc-60aa-3ccf-15c3-97b0-e9c0.ngrok-free.app/api/sensor-data', { // 서버 엔드포인트 URL로 교체
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
