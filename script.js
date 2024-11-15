@@ -97,17 +97,6 @@ function handleMotionEvent(event) {
 }
 
 
-    
-    
-  
-
-
-if (window.DeviceOrientationEvent) {
-    window.addEventListener("deviceorientation", handleOrientationEvent, true);
-} else {
-    console.log("DeviceOrientationEvent is not supported on this device.");
-}
-
 
 
 // 서버로 데이터를 보내는 함수
