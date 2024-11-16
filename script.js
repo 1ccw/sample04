@@ -86,7 +86,15 @@ function handleMotionEvent(event) {
     console.log("rotationRate:", sensorData.alpha, sensorData.beta, sensorData.gamma);
 
     
-    setInterval(sendDataToServer, 3000);
+    setInterval(sendDataToServer, 5000);
+    //if (!isCollectingData) {
+    //    isCollectingData = true;
+    //    sendDataToServer();
+
+    //    setTimeout(() => {
+    //        isCollectingData = false; // 5초 후 데이터 전송 가능 상태로 전환
+    //    }, 5000);
+    //}
 }
 
 
