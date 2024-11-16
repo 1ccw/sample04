@@ -86,7 +86,9 @@ function handleMotionEvent(event) {
     console.log("rotationRate:", sensorData.alpha, sensorData.beta, sensorData.gamma);
 
     
-    setInterval(sendDataToServer, 5000);
+     if (!intervalId) {
+        intervalId = setInterval(sendDataToServer, 5000);
+    }
     //if (!isCollectingData) {
     //    isCollectingData = true;
     //    sendDataToServer();
